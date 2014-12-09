@@ -1,0 +1,24 @@
+﻿<div ng-controller="dayreportcontroller">
+    <div class="row">
+        <div class="col-lg-3">
+            Började:
+            <timepicker ng-model="starttime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        </div>
+        <div class="col-lg-3">
+            Lunch började:
+            <timepicker ng-model="lunchstarttime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        </div>
+        <div class="col-lg-3">
+            Lunch slutade:
+            <timepicker ng-model="lunchendtime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        </div>
+        <div class="col-lg-3">
+            Slutade:
+            <timepicker ng-model="endtime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        </div>
+    </div>
+    <div class="row">
+        <label>Total tid: {{totaltime}}</label>
+    </div>
+
+</div>
