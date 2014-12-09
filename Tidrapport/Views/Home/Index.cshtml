@@ -6,22 +6,26 @@
     
     <div class="row">
         <div class="col-lg-4">
-            <div ng-controller="datepickercontroller">
-                <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
+            <div class="row">
+                <div ng-controller="datepickercontroller">
+                    <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
 
-                <div style="display:inline-block; min-height:290px;">
-                    <datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+                    <div style="display:inline-block; min-height:290px;">
+                        <datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-info" ng-click="today()">Today</button>
+                        <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+                    </div>
                 </div>
-
-                <hr />
-                <button type="button" class="btn btn-sm btn-info" ng-click="today()">Today</button>
-                <button type="button" class="btn btn-sm btn-default" ng-click="dt = '2009-08-24'">2009-08-24</button>
-                <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
-                <button type="button" class="btn btn-sm btn-default" ng-click="toggleMin()" tooltip="After today restriction">Min date</button>
+            </div>
+            <hr />
+            <div class="row">
+                <h2>Här kan de vara något spännande.. kanske statistik??</h2>
             </div>
         </div>
         <div class="col-lg-8">
-
+            <h1>Här kommer det vara tidrapporteringsinmatning</h1>
         </div>
     </div>
 
