@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Hem";
+}
+
+<div>
+    
+    <div class="row">
+        <div class="col-lg-4">
+            <div ng-controller="datepickercontroller">
+                <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
+
+                <div style="display:inline-block; min-height:290px;">
+                    <datepicker ng-model="dt" min-date="minDate" show-weeks="true" class="well well-sm"></datepicker>
+                </div>
+
+                <hr />
+                <button type="button" class="btn btn-sm btn-info" ng-click="today()">Today</button>
+                <button type="button" class="btn btn-sm btn-default" ng-click="dt = '2009-08-24'">2009-08-24</button>
+                <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Clear</button>
+                <button type="button" class="btn btn-sm btn-default" ng-click="toggleMin()" tooltip="After today restriction">Min date</button>
+            </div>
+        </div>
+        <div class="col-lg-8">
+
+        </div>
+    </div>
+
+
+</div>
