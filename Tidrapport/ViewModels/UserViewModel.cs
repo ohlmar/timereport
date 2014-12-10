@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNet.Identity.EntityFramework;
+using System.Linq;
+using System.Web;
 
-namespace TimeReport.Model.Entities
+namespace Tidrapport.ViewModels
 {
-    public class User : IdentityUser
+    public class UserViewModel
     {
-        public virtual ICollection<DayReport> DayReports { get; set; }
-
         public DateTime? DefaultStartWork { get; set; }
         public DateTime? DefaultStartLunch { get; set; }
         public DateTime? DefaultEndLunch { get; set; }

@@ -1,11 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Tidrapport.Models;
+using Tidrapport.ViewModels;
 using TimeReport.Data;
+using TimeReport.Data.Contract;
 using TimeReport.Model;
 using TimeReport.Model.Entities;
 
@@ -14,9 +18,12 @@ namespace Tidrapport.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        public AccountController()
+        private IUowFactory _uowFactory;
+
+        public AccountController(IUowFactory uowFactory)
             : this(new UserManager<User>(new UserStore<User>(new TimeReportDbContext())))
         {
+            _uowFactory = _uowFactory;
         }
 
         public AccountController(UserManager<User> userManager)
@@ -25,6 +32,58 @@ namespace Tidrapport.Controllers
         }
 
         public UserManager<User> UserManager { get; private set; }
+
+        public JsonResult GetSettings()
+        {
+            var result = new ResultViewModel();
+
+            using (var uow = _uowFactory.GetUow())
+            {
+                var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == User.Identity.GetUserId());
+
+                result.Data = new
+                {
+                    User = Mapper.Map<UserViewModel>(userFromDb)
+                };
+            }
+
+            return Json(result);
+        }
+
+        public JsonResult UpdateSettings(UserViewModel model)
+        {
+            var result = new ResultViewModel();
+
+            using (var uow = _uowFactory.GetUow())
+            {
+                var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == User.Identity.GetUserId());
+
+                if (model.DefaultStartWork.HasValue)
+                {
+                    userFromDb.DefaultStartWork = model.DefaultStartWork;
+                }
+
+                if (model.DefaultStartLunch.HasValue)
+                {
+                    userFromDb.DefaultStartLunch = model.DefaultStartLunch;
+                }
+
+                if (model.DefaultEndLunch.HasValue)
+                {
+                    userFromDb.DefaultEndLunch = model.DefaultEndLunch;
+                }
+
+                if (model.DefaultEndWork.HasValue)
+                {
+                    userFromDb.DefaultEndWork = model.DefaultEndWork;
+                }
+
+                uow.UserRepository.Update(userFromDb);
+                uow.Commit();
+            }
+
+            return Json(result);
+        }
 
         //
         // GET: /Account/Login

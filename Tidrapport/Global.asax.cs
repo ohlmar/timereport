@@ -18,6 +18,9 @@ namespace Tidrapport
 
             // Configure Unity
             GlobalConfiguration.Configure(UnityConfiguration.Configure);
+
+            // Configure AutoMapper
+            AutoMapperConfiguration.Configure();
         }
     }
 }
