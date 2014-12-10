@@ -2,7 +2,10 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.Practices.Unity;
 using Tidrapport.Configuration;
+using TimeReport.Data;
+using TimeReport.Data.Contract;
 
 namespace Tidrapport
 {
@@ -17,10 +20,20 @@ namespace Tidrapport
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // Configure Unity
-            GlobalConfiguration.Configure(UnityConfiguration.Configure);
+            GlobalConfiguration.Configure(ConfigureUnity);
 
             // Configure AutoMapper
             AutoMapperConfiguration.Configure();
+        }
+
+        public static void ConfigureUnity(HttpConfiguration config)
+        {
+            var container = new UnityContainer();
+
+            container.RegisterType<IUowFactory, UowFactory>();
+            container.RegisterType<ITimeReportUow, TimeReportUow>();
+
+            ControllerBuilder.Current.SetControllerFactory(new UnityControllerFactory(container));
         }
     }
 }

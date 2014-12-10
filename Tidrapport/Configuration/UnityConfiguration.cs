@@ -14,7 +14,6 @@ namespace Tidrapport.Configuration
             container.RegisterType<IUowFactory, UowFactory>();
             container.RegisterType<ITimeReportUow, TimeReportUow>();
 
-            config.DependencyResolver = new UnityResolver(container);
         }
     }
 }

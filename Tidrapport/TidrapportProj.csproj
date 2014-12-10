@@ -225,7 +225,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Configuration\AutoMapperConfiguration.cs" />
-    <Compile Include="Configuration\UnityResolver.cs" />
+    <Compile Include="Configuration\UnityControllerFactory.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TimeReportController.cs" />
