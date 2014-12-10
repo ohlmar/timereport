@@ -7,14 +7,20 @@
     <meta name="description" content="Tidrapport" />
     @Styles.Render("~/bundles/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 
     <script src="~/Scripts/angular.min.js"></script>
     <script src="~/Scripts/ui-bootstrap-tpls-0.12.0.js"></script>
     <script src="~/Scripts/moment.js"></script>
+    <script src="~/Scripts/highcharts/highcharts.js"></script>
+    <script src="~/Scripts/highcharts/highcharts-ng.js"></script>
+    <script src="~/Scripts/highcharts/highcharts-more.js"></script>
 
     <script src="~/Scripts/app/app.js"></script>
     <script src="~/Scripts/app/datepickercontroller.js"></script>
     <script src="~/Scripts/app/dayreportcontroller.js"></script>
+    <script src="~/Scripts/app/statscontroller.js"></script>
+
 
 </head>
 <body ng-app="timeReport" ng-controller="MainCtrl">
@@ -34,7 +40,7 @@
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                 </ul>
-                @*@Html.Partial("_LoginPartial")*@
+                @Html.Partial("_LoginPartial")
             </div>
         </div>
     </div>

@@ -2,7 +2,7 @@
     ViewBag.Title = "Hem";
 }
 
-<div>
+<div style="padding: 20px">
     
     <div class="row">
         <div class="col-lg-4">
@@ -20,13 +20,13 @@
                 </div>
             </div>
             <hr />
-            <div class="row">
-                <h2>Här kan de vara något spännande.. kanske statistik??</h2>
-            </div>
         </div>
         <div class="col-lg-8">
             @Html.Partial("../Report/_DayReport")
         </div>
+    </div>
+    <div class="row">
+            @Html.Partial("../Report/_Stats")
     </div>
 
 

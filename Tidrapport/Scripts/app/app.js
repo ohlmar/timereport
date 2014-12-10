@@ -1,4 +1,4 @@
-﻿angular.module('timeReport', ['ui.bootstrap'])
+﻿angular.module('timeReport', ['ui.bootstrap', 'highcharts-ng'])
 .controller('MainCtrl', [
 '$scope',
 function ($scope) {
