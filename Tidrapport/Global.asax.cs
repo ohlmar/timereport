@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Tidrapport.Configuration;
 
 namespace Tidrapport
 {
@@ -14,6 +15,9 @@ namespace Tidrapport
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // Configure Unity
+            GlobalConfiguration.Configure(UnityConfiguration.Configure);
         }
     }
 }
