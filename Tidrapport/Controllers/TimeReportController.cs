@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -58,7 +59,32 @@ namespace Tidrapport.Controllers
         {
             var result = new ResultViewModel();
 
+            using (var uow = _uowFactory.GetUow())
+            {
+                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x =>x.UserId == User.Identity.GetUserId() && DbFunctions.TruncateTime(day) == DbFunctions.TruncateTime(x.Day));
+                
+                result.Data = new
+                {
+                    Report = Mapper.Map<DayReportViewModel>(report)
+                };
+            }
 
+            return Json(result);
+        }
+
+        public JsonResult Delete(int id)
+        {
+            var result = new ResultViewModel();
+
+            using (var uow = _uowFactory.GetUow())
+            {
+                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == User.Identity.GetUserId() && x.Id == id);
+                if (report != null)
+                {
+                    uow.DayReportRepository.Delete(report);
+                    uow.Commit();
+                }
+            }
 
             return Json(result);
         }
