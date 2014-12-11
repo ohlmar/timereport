@@ -31,7 +31,8 @@ namespace Tidrapport.Controllers
 
             using (var uow = _uowFactory.GetUow())
             {
-                var dayReportFromDb = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == User.Identity.GetUserId() && DbFunctions.TruncateTime(model.Day) == DbFunctions.TruncateTime(x.Day));
+                var userId = User.Identity.GetUserId();
+                var dayReportFromDb = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == userId && DbFunctions.TruncateTime(model.Day) == DbFunctions.TruncateTime(x.Day));
                 if (dayReportFromDb != null)
                 {
                     dayReportFromDb.UserId = mappedModel.UserId;
@@ -78,7 +79,9 @@ namespace Tidrapport.Controllers
 
             using (var uow = _uowFactory.GetUow())
             {
-                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == User.Identity.GetUserId() && x.Id == id);
+                var userId = User.Identity.GetUserId();
+
+                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == userId && x.Id == id);
                 if (report != null)
                 {
                     uow.DayReportRepository.Delete(report);
