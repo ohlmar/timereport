@@ -1,4 +1,53 @@
-﻿
+﻿<style>
+
+.box {
+	/* basics */
+	background-color: #444;
+	color: #C4BE92;
+    text-align: center;
+    display: inline-block;
+	/* rounded corners */
+    -webkit-border-radius: 12px;
+    border-radius: 12px; 
+    -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+    padding: .8em .8em 1em;
+    width: 8em;
+	margin: 0 auto;	
+  	-webkit-box-shadow: 0 0 12px 0 #000;
+    box-shadow: 0 0 12px 0 #000;
+  
+}
+input {
+	font-size: 2.4em;
+	background-color: transparent;
+	text-align: center;
+	border-width: 0;
+	width: 100%;
+	margin: 0 0 .1em 0;
+	color: #fff;
+    
+}
+
+label {
+	display: block;
+	font-size: .8em;
+}
+</style>
+
 <div ng-controller="statscontroller">
-    <div id="container"></div>
+    <div id="summaries" style="text-align: center">
+        <div class="box">
+            <label>Flexbank</label>
+            <input readonly="readonly" value="-3,54" />
+        </div>
+        <div class="box">
+            <label>Semesterdagar</label>
+            <input readonly="readonly" value="24" />
+        </div>
+        <div class="box">
+            <label >Snitttid per dag</label>
+            <input readonly="readonly" value="8,02" />
+        </div>
+    </div>
+
 </div>

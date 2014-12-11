@@ -1,20 +1,40 @@
 ﻿<div ng-controller="dayreportcontroller">
     <div class="row">
-        <div class="col-lg-3">
-            Började:
-            <timepicker ng-model="starttime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        <div class="col-lg-3" style="text-align: center">
+            <label>Började</label>
+            <div style="display: table">
+                <timepicker ng-model="starttime" ng-change="changed()" ng-class="{'has-error' : starttime >= lunchstarttime}" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                <div style="display: table-cell; vertical-align: middle; padding-left: 5px">
+                    <button type="button" class="btn btn-sm btn-info" ng-click="setStartTimeNow()">Nu</button>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3">
-            Lunch började:
-            <timepicker ng-model="lunchstarttime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        <div class="col-lg-3" style="text-align: center">
+            <label>Lunch började</label>
+            <div style="display: table">
+                <timepicker ng-model="lunchstarttime" ng-change="changed()" ng-class="{'has-error' : lunchstarttime >= lunchendtime}" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                <div style="display: table-cell; vertical-align: middle; padding-left: 5px">
+                    <button type="button" class="btn btn-sm btn-info" ng-click="setLunchStartTimeNow()">Nu</button>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3">
-            Lunch slutade:
-            <timepicker ng-model="lunchendtime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        <div class="col-lg-3" style="text-align: center">
+            <label>Lunch slutade</label>
+            <div style="display: table">
+                <timepicker ng-model="lunchendtime" ng-change="changed()" ng-class="{'has-error' : lunchendtime >= endtime}" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                <div style="display: table-cell; vertical-align: middle; padding-left: 5px">
+                    <button type="button" class="btn btn-sm btn-info" ng-click="setLunchEndTimeNow()">Nu</button>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-3">
-            Slutade:
-            <timepicker ng-model="endtime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+        <div class="col-lg-3" style="text-align: center">
+            <label>Slutade</label>
+            <div style="display: table">
+                <timepicker ng-model="endtime" ng-class="{'has-error' : endtime < lunchendtime}" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                <div style="display: table-cell; vertical-align: middle; padding-left: 5px">
+                    <button type="button" class="btn btn-sm btn-info" ng-click="setEndTimeNow()">Nu</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -22,5 +42,10 @@
             <label>Total tid: {{totaltime}}</label>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-lg-12" style="text-align: right">
+            <button type="button" class="btn btn-sm btn-warning" ng-click="reset()">Återställ</button>
+            <button type="button" class="btn btn-sm btn-danger" ng-click="remove()">Ta bort</button>
+        </div>
+    </div>
 </div>
