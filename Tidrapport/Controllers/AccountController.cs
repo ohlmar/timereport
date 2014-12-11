@@ -20,18 +20,14 @@ namespace Tidrapport.Controllers
     {
         private IUowFactory _uowFactory;
 
-        public AccountController(IUowFactory uowFactory)
-            : this(new UserManager<User>(new UserStore<User>(new TimeReportDbContext())))
-        {
-            _uowFactory = _uowFactory;
-        }
-
-        public AccountController(UserManager<User> userManager)
-        {
-            UserManager = userManager;
-        }
-
         public UserManager<User> UserManager { get; private set; }
+
+        public AccountController(IUowFactory uowFactory)
+        {
+            _uowFactory = uowFactory;
+
+            UserManager = new UserManager<User>(new UserStore<User>(new TimeReportDbContext()));
+        }
 
         public JsonResult GetSettings()
         {
