@@ -31,7 +31,7 @@ namespace Tidrapport.Controllers
 
             using (var uow = _uowFactory.GetUow())
             {
-                var dayReportFromDb = uow.DayReportRepository.GetById(mappedModel.Id);
+                var dayReportFromDb = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == User.Identity.GetUserId() && DbFunctions.TruncateTime(model.Day) == DbFunctions.TruncateTime(x.Day));
                 if (dayReportFromDb != null)
                 {
                     dayReportFromDb.UserId = mappedModel.UserId;
