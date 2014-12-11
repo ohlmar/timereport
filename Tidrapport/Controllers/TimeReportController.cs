@@ -51,6 +51,11 @@ namespace Tidrapport.Controllers
                 }
 
                 uow.Commit();
+
+                result.Data = new
+                {
+                    DayReport = Mapper.Map<DayReportViewModel>(dayReportFromDb ?? mappedModel)
+                };
             }
 
             return Json(result);
@@ -62,7 +67,9 @@ namespace Tidrapport.Controllers
 
             using (var uow = _uowFactory.GetUow())
             {
-                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x =>x.UserId == User.Identity.GetUserId() && DbFunctions.TruncateTime(day) == DbFunctions.TruncateTime(x.Day));
+                var userId = User.Identity.GetUserId();
+
+                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == userId && DbFunctions.TruncateTime(day) == DbFunctions.TruncateTime(x.Day));
                 
                 result.Data = new
                 {
