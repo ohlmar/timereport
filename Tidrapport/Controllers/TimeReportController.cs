@@ -60,9 +60,10 @@ namespace Tidrapport.Controllers
         {
             var result = new ResultViewModel();
 
+            var userId = User.Identity.GetUserId();
             using (var uow = _uowFactory.GetUow())
             {
-                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x =>x.UserId == User.Identity.GetUserId() && DbFunctions.TruncateTime(day) == DbFunctions.TruncateTime(x.Day));
+                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == userId && DbFunctions.TruncateTime(day) == DbFunctions.TruncateTime(x.Day));
                 
                 result.Data = new
                 {
