@@ -1,9 +1,10 @@
-﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $log) {
+﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $http) {
 
     $scope.starttime = moment().hours(08).minute(00);
     $scope.lunchstarttime = moment().hours(11).minute(30);
     $scope.lunchendtime = moment().hours(12).minute(00);
     $scope.endtime = moment().hours(16).minute(30);
+    $scope.selectedDay = moment().format("YYYY-MM-DD");
     $scope.totaltime = "";
 
     $scope.hstep = 1;
@@ -12,6 +13,12 @@
     $scope.ismeridian = false;
 
     $scope.changed = function () {
+
+        var resultPromise = $http.post("/TimeReport/Post", { model: { StartWork: $scope.starttime, StartLunch: $scope.lunchstarttime, EndLunch: $scope.lunchendtime, EndWork: $scope.endtime, Day: $scope.selectedDay } });
+        resultPromise.success(function (data) {
+
+        });
+
         calcTotalTime();
     };
 
@@ -29,31 +36,10 @@
         $scope.lunchendtime = moment().hours(12).minute(00);
         $scope.endtime = moment().hours(16).minute(30);
     }
-    var Example = (function () {
-        "use strict";
 
-        var elem,
-            hideHandler,
-            that = {};
-
-        that.init = function (options) {
-            elem = $(options.selector);
-        };
-
-        that.show = function (text) {
-            clearTimeout(hideHandler);
-
-            elem.find("span").html(text);
-            elem.delay(200).fadeIn().delay(4000).fadeOut();
-        };
-
-        return that;
-    }());
 
     $scope.remove = function () {
-        bootbox.confirm("Are you sure?", function (result) {
-            Example.show("Confirm result: " + result);
-        });
+        
     }
 
 
