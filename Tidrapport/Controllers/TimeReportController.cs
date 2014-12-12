@@ -69,7 +69,7 @@ namespace Tidrapport.Controllers
             {
                 var userId = User.Identity.GetUserId();
 
-                var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && DbFunctions.TruncateTime(x.Day) > DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Day) < DbFunctions.TruncateTime(endDate));
+                var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && DbFunctions.TruncateTime(x.Day) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Day) <= DbFunctions.TruncateTime(endDate));
                 
                 result.Data = new
                 {
