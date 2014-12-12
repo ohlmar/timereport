@@ -55,29 +55,19 @@ namespace Tidrapport.Controllers
             {
                 var userId = User.Identity.GetUserId();
                 var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == userId);
-
-                if (model.DefaultStartWork.HasValue)
+                if (userFromDb != null)
                 {
-                    userFromDb.DefaultStartWork = model.DefaultStartWork;
-                }
+                    userFromDb.DefaultStartWork = model.DefaultStartWork.RemoveSecAndMilliSec();
 
-                if (model.DefaultStartLunch.HasValue)
-                {
-                    userFromDb.DefaultStartLunch = model.DefaultStartLunch;
-                }
+                    userFromDb.DefaultStartLunch = model.DefaultStartLunch.RemoveSecAndMilliSec();
 
-                if (model.DefaultEndLunch.HasValue)
-                {
-                    userFromDb.DefaultEndLunch = model.DefaultEndLunch;
-                }
+                    userFromDb.DefaultEndLunch = model.DefaultEndLunch.RemoveSecAndMilliSec();
 
-                if (model.DefaultEndWork.HasValue)
-                {
-                    userFromDb.DefaultEndWork = model.DefaultEndWork;
-                }
+                    userFromDb.DefaultEndWork = model.DefaultEndWork.RemoveSecAndMilliSec();
 
-                uow.UserRepository.Update(userFromDb);
-                uow.Commit();
+                    uow.UserRepository.Update(userFromDb);
+                    uow.Commit();
+                }
             }
 
             return Json(result);
