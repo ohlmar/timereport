@@ -61,18 +61,19 @@ namespace Tidrapport.Controllers
             return Json(result);
         }
 
-        public JsonResult GetForDay(DateTime day)
+        public JsonResult GetDayReports(DateTime startDate, DateTime endDate)
         {
             var result = new ResultViewModel();
 
             using (var uow = _uowFactory.GetUow())
             {
                 var userId = User.Identity.GetUserId();
-                var report = uow.DayReportRepository.GetAll().FirstOrDefault(x => x.UserId == userId && DbFunctions.TruncateTime(day) == DbFunctions.TruncateTime(x.Day));
+
+                var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && DbFunctions.TruncateTime(x.Day) > DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Day) < DbFunctions.TruncateTime(endDate));
                 
                 result.Data = new
                 {
-                    Report = Mapper.Map<DayReportViewModel>(report)
+                    Reports = Mapper.Map<List<DayReportViewModel>>(reports)
                 };
             }
 
@@ -97,5 +98,7 @@ namespace Tidrapport.Controllers
 
             return Json(result);
         }
+
+
     }
 }
