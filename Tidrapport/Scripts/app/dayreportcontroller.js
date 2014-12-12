@@ -1,10 +1,10 @@
 ﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $http, date) {
 
-    $scope.starttime = moment().hours(08).minute(00);
-    $scope.lunchstarttime = moment().hours(11).minute(30);
-    $scope.lunchendtime = moment().hours(12).minute(00);
-    $scope.endtime = moment().hours(16).minute(30);
-    $scope.selectedDay = moment().format("YYYY-MM-DD");
+    $scope.starttime = 0;
+    $scope.lunchstarttime = 0;
+    $scope.lunchendtime = 0;
+    $scope.endtime = 0;
+    var id = 0;
     $scope.totaltime = "";
 
     $scope.hstep = 1;
@@ -28,14 +28,22 @@
         var resultPromise = $http.post("/TimeReport/GetForDay", { day: moment($scope.date.selectedDate).format("YYYY-MM-DD") });
         resultPromise.success(function (data) {
             data = data.Data.Report;
-
             $scope.starttime = moment(data.StartWork);
             $scope.lunchstarttime = moment(data.StartLunch);
             $scope.lunchendtime = moment(data.EndLunch);
             $scope.endtime = moment(data.EndWork);
+            id = data.Id;
 
         });
     });
+
+    var init = function() {
+        $scope.starttime = moment().hours(08).minute(00);
+        $scope.lunchstarttime = moment().hours(11).minute(30);
+        $scope.lunchendtime = moment().hours(12).minute(00);
+        $scope.endtime = moment().hours(16).minute(30);
+    }
+    init();
 
     var calcTotalTime = function() {
         var beforeLunch = moment($scope.lunchstarttime).diff(moment($scope.starttime));
@@ -54,7 +62,13 @@
 
 
     $scope.remove = function () {
-        
+
+        //Are you sure??
+
+        var resultPromise = $http.post("/TimeReport/Delete", { id: id });
+        resultPromise.success(function (data) {
+
+        });
     }
 
 

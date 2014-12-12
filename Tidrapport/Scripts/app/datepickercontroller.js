@@ -1,6 +1,6 @@
 ﻿angular.module('timeReport').controller('datepickercontroller', function ($scope, date) {
     $scope.today = function () {
-        $scope.dt = new Date();
+       //date.selectedDate = new Date();
     };
     $scope.today();
 
