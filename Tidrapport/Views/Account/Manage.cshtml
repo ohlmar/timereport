@@ -6,6 +6,48 @@
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
+<p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
+<div class="row">
+    <div class="col-md-12">
+        <h4>Standardtider</h4>
+        <hr />
+        <div class="col-md-12" ng-controller="manageusersettings">
+            <div class="row">
+                <div style="display: table">
+                    <div style="display: table-cell; vertical-align: middle; padding-left: 5px; width: 120px;">
+                        <label>Började</label>
+                    </div>
+                    <timepicker ng-model="starttime" ng-change="changed()" ng-class="{'has-error' : starttime >= lunchstarttime}" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </div>
+            </div>
+            <div class="row">
+                <div style="display: table">
+                    <div style="display: table-cell; vertical-align: middle; padding-left: 5px;width: 120px;">
+                        <label>Lunch började</label>
+                    </div>
+                    <timepicker ng-model="lunchstarttime" ng-change="changed()" ng-class="{'has-error' : lunchstarttime >= lunchendtime}" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </div>
+            </div>
+            <div class="row">
+                <div style="display: table">
+                    <div style="display: table-cell; vertical-align: middle; padding-left: 5px; width: 120px;">
+                        <label>Lunch slutade</label>
+                    </div>
+                    <timepicker ng-model="lunchendtime" ng-change="changed()" ng-class="{'has-error' : lunchendtime >= endtime}" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </div>
+            </div>
+            <div class="row">
+                <div style="display: table">
+                    <div style="display: table-cell; vertical-align: middle; padding-left: 5px;width: 120px;">
+                        <label>Slutade</label>
+                    </div>
+                    <timepicker ng-model="endtime" ng-class="{'has-error' : endtime < lunchendtime}" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+                </div>
+            </div>
+        </div>
+        <hr />
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         @if (ViewBag.HasLocalPassword)
@@ -19,7 +61,7 @@
 
         <section id="externalLogins">
             @Html.Action("RemoveAccountList")
-            @Html.Partial("_ExternalLoginsListPartial", new { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
+
         </section>
     </div>
 </div>

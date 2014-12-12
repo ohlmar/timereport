@@ -326,6 +326,7 @@
     <Content Include="Scripts\app\app.js" />
     <Content Include="Scripts\app\datepickercontroller.js" />
     <Content Include="Scripts\app\dayreportcontroller.js" />
+    <Content Include="Scripts\app\manageusersettings.js" />
     <Content Include="Scripts\app\statscontroller.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootstrap.js" />

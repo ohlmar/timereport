@@ -6,6 +6,10 @@
     $scope.endtime = 0;
     var id = 0;
     $scope.totaltime = "";
+    $scope.flex = "";
+    $scope.hasNegativeFlex = false;
+
+    var defaultWorkHours = 8;
 
     $scope.hstep = 1;
     $scope.mstep = 1;
@@ -28,28 +32,40 @@
         var resultPromise = $http.post("/TimeReport/GetForDay", { day: moment($scope.date.selectedDate).format("YYYY-MM-DD") });
         resultPromise.success(function (data) {
             data = data.Data.Report;
-            $scope.starttime = moment(data.StartWork);
-            $scope.lunchstarttime = moment(data.StartLunch);
-            $scope.lunchendtime = moment(data.EndLunch);
-            $scope.endtime = moment(data.EndWork);
-            id = data.Id;
-
+            if (data) {
+                $scope.starttime = moment(data.StartWork);
+                $scope.lunchstarttime = moment(data.StartLunch);
+                $scope.lunchendtime = moment(data.EndLunch);
+                $scope.endtime = moment(data.EndWork);
+                id = data.Id;
+            } else {
+                setDefault();
+            }
         });
     });
 
-    var init = function() {
+    var setDefault = function () {
         $scope.starttime = moment().hours(08).minute(00);
         $scope.lunchstarttime = moment().hours(11).minute(30);
         $scope.lunchendtime = moment().hours(12).minute(00);
         $scope.endtime = moment().hours(16).minute(30);
     }
-    init();
+    setDefault();
 
     var calcTotalTime = function() {
         var beforeLunch = moment($scope.lunchstarttime).diff(moment($scope.starttime));
         var afterLunch = moment($scope.endtime).diff(moment($scope.lunchendtime));
 
-        $scope.totaltime = moment.duration(beforeLunch + afterLunch).hours() + ":" + moment.duration(beforeLunch + afterLunch).minutes();
+        var hours = moment.duration(beforeLunch + afterLunch).hours();
+        var minutes = moment.duration(beforeLunch + afterLunch).minutes();
+
+        var flexhours = hours >= defaultWorkHours ? hours - defaultWorkHours : hours - defaultWorkHours + 1;
+        var flexminutes = hours >= defaultWorkHours ? minutes : 60 - minutes;
+
+        $scope.totaltime = hours + "h " + minutes + "m";
+        $scope.flex = flexhours + "h " + flexminutes + "m";
+        $scope.hasNegativeFlex = hours >= defaultWorkHours ? false : true;
+
     }
     calcTotalTime();
 

@@ -35,7 +35,8 @@ namespace Tidrapport.Controllers
 
             using (var uow = _uowFactory.GetUow())
             {
-                var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == User.Identity.GetUserId());
+                var userId = User.Identity.GetUserId();
+                var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == userId);
 
                 result.Data = new
                 {
@@ -52,7 +53,8 @@ namespace Tidrapport.Controllers
 
             using (var uow = _uowFactory.GetUow())
             {
-                var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == User.Identity.GetUserId());
+                var userId = User.Identity.GetUserId();
+                var userFromDb = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == userId);
 
                 if (model.DefaultStartWork.HasValue)
                 {
