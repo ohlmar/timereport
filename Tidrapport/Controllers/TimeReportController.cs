@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Tidrapport.ViewModels;
 using TimeReport.Data.Contract;
+using TimeReport.Model;
 using TimeReport.Model.Entities;
 
 namespace Tidrapport.Controllers
@@ -29,6 +30,22 @@ namespace Tidrapport.Controllers
             var mappedModel = Mapper.Map<DayReport>(model);
             mappedModel.UserId = User.Identity.GetUserId();
 
+            if (mappedModel.Day == DateTime.MinValue)
+            {
+                result.Messages.Add(new Message{ Text = "DayReport.Day needs to have a value" });
+                return Json(result);
+            }
+
+            if (mappedModel.IsVacation)
+            {
+                mappedModel.StartWork = null;
+                mappedModel.StartLunch = null;
+                mappedModel.EndLunch = null;
+                mappedModel.EndWork = null;
+            }
+
+            //Validate that if IsVacation = false => all dates needs a value
+
             using (var uow = _uowFactory.GetUow())
             {
                 var userId = User.Identity.GetUserId();
@@ -36,6 +53,7 @@ namespace Tidrapport.Controllers
                 if (dayReportFromDb != null)
                 {
                     dayReportFromDb.UserId = mappedModel.UserId;
+                    dayReportFromDb.IsVacation = mappedModel.IsVacation;
                     dayReportFromDb.StartWork = mappedModel.StartWork;
                     dayReportFromDb.StartLunch = mappedModel.StartLunch;
                     dayReportFromDb.EndLunch = mappedModel.EndLunch;
@@ -99,6 +117,26 @@ namespace Tidrapport.Controllers
             return Json(result);
         }
 
+        public JsonResult CalculateTotalFlex()
+        {
+            var result = new ResultViewModel();
+
+            using (var uow = _uowFactory.GetUow())
+            {
+                var userId = User.Identity.GetUserId();
+
+                var reports = uow.DayReportRepository.GetAll().Where(x =>x.UserId == userId && !x.IsVacation && x.TotalWork != null);
+
+                var flex = reports.Sum(x => x.TotalWork.Value - 8);
+
+                result.Data = new
+                {
+                    Flex = flex
+                };
+            }
+
+            return Json(result);
+        }
 
     }
 }

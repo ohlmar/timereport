@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace TimeReport.Data
             modelBuilder.Entity<DayReport>().HasKey(x => x.Id);
 
             modelBuilder.Entity<DayReport>().HasRequired(x => x.User).WithMany(x => x.DayReports).HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<DayReport>().Property(x => x.TotalWork).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
         }
     }
 }

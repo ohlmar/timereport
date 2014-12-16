@@ -15,13 +15,36 @@ namespace TimeReport.Model.Entities
 
         public DateTime Day { get; set; }
 
-        public DateTime StartWork { get; set; }
+        public bool IsVacation { get; set; }
 
-        public DateTime StartLunch { get; set; }
+        public DateTime? StartWork { get; set; }
 
-        public DateTime EndLunch { get; set; }
+        public DateTime? StartLunch { get; set; }
 
-        public DateTime EndWork { get; set; }
+        public DateTime? EndLunch { get; set; }
+
+        public DateTime? EndWork { get; set; }
+
+        public double? TotalWork 
+        {
+            get
+            {
+                if (!IsVacation && StartWork.HasValue && StartLunch.HasValue && EndLunch.HasValue && EndWork.HasValue)
+                {
+                    return (StartLunch.Value - StartWork.Value).TotalHours + (EndWork.Value - EndLunch.Value).TotalHours;
+                }
+
+                if (IsVacation)
+                {
+                    return 0;
+                }
+
+                return null;
+            }
+            private set { }
+        }
+
+
 
         public DateTime Created { get; set; }
 

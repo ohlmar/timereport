@@ -13,13 +13,17 @@ namespace Tidrapport.ViewModels
 
         public DateTime Day { get; set; }
 
-        public DateTime StartWork { get; set; }
+        public bool IsVacation { get; set; }
 
-        public DateTime StartLunch { get; set; }
+        public DateTime? StartWork { get; set; }
 
-        public DateTime EndLunch { get; set; }
+        public DateTime? StartLunch { get; set; }
 
-        public DateTime EndWork { get; set; }
+        public DateTime? EndLunch { get; set; }
+
+        public DateTime? EndWork { get; set; }
+
+        public double? TotalWork { get; set; }
 
         public DateTime Created { get; set; }
     }
