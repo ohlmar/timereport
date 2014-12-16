@@ -1,4 +1,4 @@
-﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $http, date, _) {
+﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $rootScope, $http, date, _) {
 
     var id = 0;
     $scope.totaltime = "";
@@ -144,22 +144,15 @@
         var flexminutes = hours >= defaultWorkHours ? minutes : 60 - minutes;
 
         $scope.totaltime = hours + "h " + minutes + "m";
-        //$scope.flex = flexhours + "h " + flexminutes + "m";
+        $scope.flex = flexhours + "h " + flexminutes + "m";
         $scope.hasNegativeFlex = hours >= defaultWorkHours ? false : true;
 
     }
 
-    var getTotalFlex = function() {
-        var resultPromise = $http.post("/TimeReport/CalculateTotalFlex");
-        resultPromise.success(function (data) {
-            debugger;
-            $scope.flex = result.Data.flex;
-        });
-    };
 
     $scope.$watchGroup(['starttime', 'lunchstarttime', 'lunchendtime', 'endtime'], function (newValues, oldValues, scope) {
         calcTotalTime();
-        getTotalFlex();
+        $rootScope.$broadcast('timechanged');
     });
 
     $scope.reset = function() {
