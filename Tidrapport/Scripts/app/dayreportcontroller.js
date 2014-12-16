@@ -63,6 +63,22 @@
         });
     };
 
+    var updateReportedDays = function () {
+        var days = $(".day").not('.old').not('.new');
+
+        _.each(monthReports, function (report) {
+            var dayOfMonth = moment(report.Day).date();
+            var day = _.find(days, function (day) {
+                return day.innerHTML == dayOfMonth.toString();
+            });
+
+            if (day) {
+                day.style.backgroundColor = '#5bc0de';
+            }
+        });
+
+    };
+
     $scope.$watch('date.selectedDate', function (newValue, oldValue) {
 
         if (selectedMonth != moment($scope.date.selectedDate).month()) {
@@ -106,6 +122,7 @@
 
 
         }
+        updateReportedDays();
     });
 
     var setDefault = function () {
