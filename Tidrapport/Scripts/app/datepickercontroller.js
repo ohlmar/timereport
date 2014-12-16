@@ -1,24 +1,13 @@
-﻿angular.module('timeReport').controller('datepickercontroller', function($scope, date, _) {
-    $scope.today = function() {
+﻿angular.module('timeReport').controller('datepickercontroller', function ($scope, date) {
+    $scope.today = function () {
         //date.selectedDate = new Date();
     };
     $scope.today();
 
     $scope.date = date;
 
-    $scope.clear = function() {
+    $scope.clear = function () {
         $scope.dt = null;
-    };
-
-    $('.datepicker').datepicker();
-
-    $scope.test = function () {
-        var days = $(".day").not('.old').not('.new');
-
-        _.each(days, function(day) {
-            day.style.backgroundColor = '#5bc0de';
-        })
-
     };
 
 });

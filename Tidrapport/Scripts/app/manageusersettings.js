@@ -1,4 +1,4 @@
-﻿angular.module('timeReport').controller('manageusersettings', function ($scope, $http) {
+﻿angular.module('timeReport').controller('manageusersettings', function ($scope, $http, date) {
   
     $scope.hstep = 1;
     $scope.mstep = 1;
@@ -11,7 +11,19 @@
         resultPromise.success(function (data) {
         });
 
+        calcTotalTime();
     };
+
+
+    var calcTotalTime = function () {
+        var beforeLunch = moment($scope.lunchstarttime).diff(moment($scope.starttime));
+        var afterLunch = moment($scope.endtime).diff(moment($scope.lunchendtime));
+
+        var hours = moment.duration(beforeLunch + afterLunch).hours();
+        var minutes = moment.duration(beforeLunch + afterLunch).minutes();
+
+    }
+    calcTotalTime();
 
     var getUserSettings = function() {
 
@@ -31,6 +43,11 @@
                 $scope.endtime = moment().hours(16).minute(30);
             }
         });
+        resultPromise.error(function (data) {
+            debugger;
+        });
+
+        calcTotalTime();
     };
     getUserSettings();
 
