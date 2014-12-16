@@ -7,3 +7,7 @@ function ($scope) {
 tidrapport.factory('date', function () {
     return { selectedDate: moment() };
 });
+
+tidrapport.factory('_', function () {
+    return window._;
+});

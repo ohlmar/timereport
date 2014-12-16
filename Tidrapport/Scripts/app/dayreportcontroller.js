@@ -1,9 +1,5 @@
-﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $http, date) {
+﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $http, date, _) {
 
-    $scope.starttime = 0;
-    $scope.lunchstarttime = 0;
-    $scope.lunchendtime = 0;
-    $scope.endtime = 0;
     var id = 0;
     $scope.totaltime = "";
     $scope.flex = "";
@@ -15,40 +11,108 @@
     $scope.mstep = 1;
 
     $scope.date = date;
+    var selectedMonth;
+    var monthReports;
+
+    var settings = {
+        starttime: moment(),
+        lunchstarttime: moment(),
+        lunchendtime: moment(),
+        endtime: moment(),
+    };
 
     $scope.ismeridian = false;
+
+    var getUserSettings = function () {
+        var resultPromise = $http.post("/Account/GetSettings");
+        resultPromise.success(function (data) {
+            var data = data.Data.User;
+            if (data.DefaultStartWork) {
+                settings.starttime = moment(data.DefaultStartWork);
+                settings.lunchstarttime = moment(data.DefaultStartLunch);
+                settings.lunchendtime = moment(data.DefaultEndLunch);
+                settings.endtime = moment(data.DefaultEndWork);
+            } else {
+                settings.starttime = moment().hours(08).minute(00);
+                settings.lunchstarttime = moment().hours(11).minute(30);
+                settings.lunchendtime = moment().hours(12).minute(00);
+                settings.endtime = moment().hours(16).minute(30);
+            }
+        });
+    };
+    getUserSettings();
 
     $scope.changed = function () {
 
         var resultPromise = $http.post("/TimeReport/Post", { model: { StartWork: $scope.starttime, StartLunch: $scope.lunchstarttime, EndLunch: $scope.lunchendtime, EndWork: $scope.endtime, Day: moment($scope.date.selectedDate).format("YYYY-MM-DD") } });
-        resultPromise.success(function (data) {
+        resultPromise.success(function (result) {
+            var selectedDay = _.find(monthReports, function (day) {
+                return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
+            });
+            result = result.Data.DayReport;
+            if (selectedDay) {
+                selectedDay.StartWork = result.StartWork;
+                selectedDay.StartLunch = result.StartLunch;
+                selectedDay.EndLunch = result.EndLunch;
+                selectedDay.EndWork = result.EndWork;
+            } else {
+                monthReports.push(result);
+            }
+
 
         });
-
-        calcTotalTime();
     };
 
     $scope.$watch('date.selectedDate', function (newValue, oldValue) {
-        var resultPromise = $http.post("/TimeReport/GetForDay", { day: moment($scope.date.selectedDate).format("YYYY-MM-DD") });
-        resultPromise.success(function (data) {
-            data = data.Data.Report;
-            if (data) {
-                $scope.starttime = moment(data.StartWork);
-                $scope.lunchstarttime = moment(data.StartLunch);
-                $scope.lunchendtime = moment(data.EndLunch);
-                $scope.endtime = moment(data.EndWork);
-                id = data.Id;
+
+        if (selectedMonth != moment($scope.date.selectedDate).month()) {
+            selectedMonth = moment($scope.date.selectedDate).month();
+
+            var resultPromise = $http.post("/TimeReport/GetDayReports", { startDate: moment($scope.date.selectedDate).startOf("month"), endDate: moment($scope.date.selectedDate).endOf("month") });
+            resultPromise.success(function (data) {
+                data = data.Data.Reports;
+                if (data) {
+                    monthReports = data;
+                    var day = _.find(monthReports, function(day) {
+                        return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
+                    });
+                    if (day) {
+                        $scope.starttime = moment(day.StartWork);
+                        $scope.lunchstarttime = moment(day.StartLunch);
+                        $scope.lunchendtime = moment(day.EndLunch);
+                        $scope.endtime = moment(day.EndWork);
+                        id = day.Id;
+                    } else {
+                        setDefault();
+                    }
+
+                } else {
+                    setDefault();
+                }
+            });
+        } else {
+            var day = _.find(monthReports, function (day) {
+                return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
+            });
+            if (day) {
+                $scope.starttime = moment(day.StartWork);
+                $scope.lunchstarttime = moment(day.StartLunch);
+                $scope.lunchendtime = moment(day.EndLunch);
+                $scope.endtime = moment(day.EndWork);
+                id = day.Id;
             } else {
                 setDefault();
             }
-        });
+
+
+        }
     });
 
     var setDefault = function () {
-        $scope.starttime = moment().hours(08).minute(00);
-        $scope.lunchstarttime = moment().hours(11).minute(30);
-        $scope.lunchendtime = moment().hours(12).minute(00);
-        $scope.endtime = moment().hours(16).minute(30);
+        $scope.starttime = settings.starttime;
+        $scope.lunchstarttime = settings.lunchstarttime;
+        $scope.lunchendtime = settings.lunchendtime;
+        $scope.endtime = settings.endtime;
     }
     setDefault();
 
@@ -67,15 +131,14 @@
         $scope.hasNegativeFlex = hours >= defaultWorkHours ? false : true;
 
     }
-    calcTotalTime();
+
+    $scope.$watchGroup(['starttime', 'lunchstarttime', 'lunchendtime', 'endtime'], function (newValues, oldValues, scope) {
+        calcTotalTime();
+    });
 
     $scope.reset = function() {
-        $scope.starttime = moment().hours(08).minute(00);
-        $scope.lunchstarttime = moment().hours(11).minute(30);
-        $scope.lunchendtime = moment().hours(12).minute(00);
-        $scope.endtime = moment().hours(16).minute(30);
+        setDefault();
     }
-
 
     $scope.remove = function () {
 
@@ -86,7 +149,6 @@
 
         });
     }
-
 
     $scope.setStartTimeNow = function() {
         $scope.starttime = moment();
