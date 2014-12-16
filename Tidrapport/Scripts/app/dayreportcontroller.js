@@ -144,13 +144,22 @@
         var flexminutes = hours >= defaultWorkHours ? minutes : 60 - minutes;
 
         $scope.totaltime = hours + "h " + minutes + "m";
-        $scope.flex = flexhours + "h " + flexminutes + "m";
+        //$scope.flex = flexhours + "h " + flexminutes + "m";
         $scope.hasNegativeFlex = hours >= defaultWorkHours ? false : true;
 
     }
 
+    var getTotalFlex = function() {
+        var resultPromise = $http.post("/TimeReport/CalculateTotalFlex");
+        resultPromise.success(function (data) {
+            debugger;
+            $scope.flex = result.Data.flex;
+        });
+    };
+
     $scope.$watchGroup(['starttime', 'lunchstarttime', 'lunchendtime', 'endtime'], function (newValues, oldValues, scope) {
         calcTotalTime();
+        getTotalFlex();
     });
 
     $scope.reset = function() {
@@ -162,7 +171,7 @@
         //Are you sure??
 
         var resultPromise = $http.post("/TimeReport/Delete", { id: id });
-        resultPromise.success(function (data) {
+        resultPromise.success(function (result) {
 
         });
     }
