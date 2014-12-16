@@ -24,7 +24,14 @@ namespace Tidrapport.Configuration
             protected override void Configure()
             {
                 Mapper.CreateMap<DayReport, DayReportViewModel>();
-                Mapper.CreateMap<DayReportViewModel, DayReport>();
+
+                Mapper.CreateMap<DayReportViewModel, DayReport>()
+                    .ForMember(dest => dest.TotalWork, opt => opt.Ignore())
+                    .ForMember(dest => dest.StartWork, opt => opt.MapFrom(src => src.StartWork.RemoveSecAndMilliSec()))
+                    .ForMember(dest => dest.StartLunch, opt => opt.MapFrom(src => src.StartLunch.RemoveSecAndMilliSec()))
+                    .ForMember(dest => dest.EndLunch, opt => opt.MapFrom(src => src.EndLunch.RemoveSecAndMilliSec()))
+                    .ForMember(dest => dest.EndWork, opt => opt.MapFrom(src => src.EndWork.RemoveSecAndMilliSec()));
+
             }
         }
 

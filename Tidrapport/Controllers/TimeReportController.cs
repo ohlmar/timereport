@@ -125,9 +125,9 @@ namespace Tidrapport.Controllers
             {
                 var userId = User.Identity.GetUserId();
 
-                var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && !x.IsVacation && x.TotalWork != null).ToList();
+                var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && !x.IsVacation).ToList();
 
-                var flex = reports.Sum(x => x.TotalWork.Value - 8);
+                var flex = reports.Where(x => x.TotalWork != null).Sum(x => x.TotalWork.Value - 8);
 
                 result.Data = new
                 {
