@@ -12,5 +12,7 @@ namespace TimeReport.Model.Entities
         public DateTime? DefaultStartLunch { get; set; }
         public DateTime? DefaultEndLunch { get; set; }
         public DateTime? DefaultEndWork { get; set; }
+
+        public int VacationDays { get; set; }
     }
 }

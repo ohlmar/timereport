@@ -65,6 +65,8 @@ namespace Tidrapport.Controllers
 
                     userFromDb.DefaultEndWork = model.DefaultEndWork.RemoveSecAndMilliSec();
 
+                    userFromDb.VacationDays = model.VacationDays;
+
                     uow.UserRepository.Update(userFromDb);
                     uow.Commit();
                 }
