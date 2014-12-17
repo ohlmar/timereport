@@ -105,6 +105,7 @@
                 } else {
                     setDefault();
                 }
+                updateReportedDays();
             });
         } else {
             var day = _.find(monthReports, function (day) {
@@ -120,9 +121,9 @@
                 setDefault();
             }
 
-
+            updateReportedDays();
         }
-        updateReportedDays();
+
     });
 
     var setDefault = function () {
