@@ -8,10 +8,10 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 <p>You're logged in as <strong>@User.Identity.GetUserName()</strong>.</p>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12" ng-controller="manageusersettings">
         <h4>Standardtider</h4>
         <hr />
-        <div class="col-md-12" ng-controller="manageusersettings">
+        <div class="col-md-6">
             <div class="row">
                 <div style="display: table">
                     <div style="display: table-cell; vertical-align: middle; padding-left: 5px; width: 120px;">
@@ -43,6 +43,12 @@
                     </div>
                     <timepicker ng-model="endtime" ng-class="{'has-error' : endtime < lunchendtime}" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <label>Semesterdagar per år</label>
+                <input type="text" ng-model="vacationdays" ng-change="changed()" style="width:50px" class="form-control" />
             </div>
         </div>
         <hr />

@@ -5,9 +5,11 @@
 
     $scope.ismeridian = false;
 
+    
+
     $scope.changed = function () {
 
-        var resultPromise = $http.post("/Account/UpdateSettings", { model: { DefaultStartWork: $scope.starttime, DefaultStartLunch: $scope.lunchstarttime, DefaultEndLunch: $scope.lunchendtime, DefaultEndWork: $scope.endtime } });
+        var resultPromise = $http.post("/Account/UpdateSettings", { model: { DefaultStartWork: $scope.starttime, DefaultStartLunch: $scope.lunchstarttime, DefaultEndLunch: $scope.lunchendtime, DefaultEndWork: $scope.endtime, VacationDays: $scope.vacationdays } });
         resultPromise.success(function (data) {
         });
 
@@ -30,8 +32,12 @@
                 $scope.lunchendtime = moment().hours(12).minute(00);
                 $scope.endtime = moment().hours(16).minute(30);
             }
+            $scope.vacationdays = data.VacationDays ? data.VacationDays : 0;
         });
     };
+
+
+
     getUserSettings();
 
 });

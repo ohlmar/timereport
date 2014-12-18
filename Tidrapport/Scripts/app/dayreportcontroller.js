@@ -1,18 +1,16 @@
-﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $rootScope, $http, date, _) {
+﻿angular.module('timeReport').controller('dayreportcontroller', function ($scope, $rootScope, $http, date, _, reports) {
 
     var id = 0;
-    $scope.totaltime = "";
-    $scope.flex = "";
     $scope.hasNegativeFlex = false;
 
     var defaultWorkHours = 8;
 
-    $scope.hstep = 1;
-    $scope.mstep = 1;
+    $scope.hstep = $scope.isVacation ? 0 : 1;
+    $scope.mstep = $scope.isVacation ? 0 : 1;
 
     $scope.date = date;
+
     var selectedMonth;
-    var monthReports;
 
     var settings = {
         starttime: moment(),
@@ -21,32 +19,29 @@
         endtime: moment(),
     };
 
+
+
     $scope.ismeridian = false;
 
     var getUserSettings = function () {
         var resultPromise = $http.post("/Account/GetSettings");
-        resultPromise.success(function (data) {
-            var data = data.Data.User;
-            if (data.DefaultStartWork) {
-                settings.starttime = moment(data.DefaultStartWork);
-                settings.lunchstarttime = moment(data.DefaultStartLunch);
-                settings.lunchendtime = moment(data.DefaultEndLunch);
-                settings.endtime = moment(data.DefaultEndWork);
-            } else {
-                settings.starttime = moment().hours(08).minute(00);
-                settings.lunchstarttime = moment().hours(11).minute(30);
-                settings.lunchendtime = moment().hours(12).minute(00);
-                settings.endtime = moment().hours(16).minute(30);
-            }
+        resultPromise.success(function (result) {
+            var result = result.Data.User;
+
+            settings.starttime = result.DefaultStartWork ? moment(result.DefaultStartWork) : moment().hours(08).minute(00);
+            settings.lunchstarttime = result.DefaultStartLunch ? moment(result.DefaultStartLunch) : moment().hours(11).minute(30);
+            settings.lunchendtime = result.DefaultEndLunch ? moment(result.DefaultEndLunch) : moment().hours(12).minute(00);
+            settings.endtime = result.DefaultEndWork ? moment(result.DefaultEndWork) : moment().hours(16).minute(30);
         });
     };
-    getUserSettings();
+
+
 
     $scope.changed = function () {
 
-        var resultPromise = $http.post("/TimeReport/Post", { model: { StartWork: $scope.starttime, StartLunch: $scope.lunchstarttime, EndLunch: $scope.lunchendtime, EndWork: $scope.endtime, Day: moment($scope.date.selectedDate).format("YYYY-MM-DD") } });
+        var resultPromise = $http.post("/TimeReport/Post", { model: { StartWork: $scope.starttime, StartLunch: $scope.lunchstarttime, EndLunch: $scope.lunchendtime, EndWork: $scope.endtime, Day: moment($scope.date.selectedDate).format("YYYY-MM-DD"), IsVacation: $scope.isVacation } });
         resultPromise.success(function (result) {
-            var selectedDay = _.find(monthReports, function (day) {
+            var selectedDay = _.find(reports.monthReports, function (day) {
                 return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
             });
             result = result.Data.DayReport;
@@ -55,31 +50,21 @@
                 selectedDay.StartLunch = result.StartLunch;
                 selectedDay.EndLunch = result.EndLunch;
                 selectedDay.EndWork = result.EndWork;
+                selectedDay.IsVacation = result.IsVacation;
             } else {
-                monthReports.push(result);
+                reports.monthReports.push(result);
             }
-
-
+            $rootScope.$broadcast('getFlex');
         });
     };
 
-    var updateReportedDays = function () {
-        var days = $(".day").not('.old').not('.new');
 
-        _.each(monthReports, function (report) {
-            var dayOfMonth = moment(report.Day).date();
-            var day = _.find(days, function (day) {
-                return day.innerHTML == dayOfMonth.toString();
-            });
+    $scope.$watch('date.selectedDate', function () {
+        selectedDayChange();
+        $scope.displayDate = moment(date.selectedDate).format("dddd, MMMM Do YYYY");
+    });
 
-            if (day) {
-                day.style.backgroundColor = '#5bc0de';
-            }
-        });
-
-    };
-
-    $scope.$watch('date.selectedDate', function (newValue, oldValue) {
+    var selectedDayChange = function() {
 
         if (selectedMonth != moment($scope.date.selectedDate).month()) {
             selectedMonth = moment($scope.date.selectedDate).month();
@@ -88,15 +73,17 @@
             resultPromise.success(function (data) {
                 data = data.Data.Reports;
                 if (data) {
-                    monthReports = data;
-                    var day = _.find(monthReports, function(day) {
+                    reports.monthReports = data;
+                    var day = _.find(reports.monthReports, function (day) {
                         return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
                     });
+
                     if (day) {
                         $scope.starttime = moment(day.StartWork);
                         $scope.lunchstarttime = moment(day.StartLunch);
                         $scope.lunchendtime = moment(day.EndLunch);
                         $scope.endtime = moment(day.EndWork);
+                        $scope.isVacation = day.IsVacation;
                         id = day.Id;
                     } else {
                         setDefault();
@@ -105,10 +92,10 @@
                 } else {
                     setDefault();
                 }
-                updateReportedDays();
+                reRenderDatePicker();
             });
         } else {
-            var day = _.find(monthReports, function (day) {
+            var day = _.find(reports.monthReports, function (day) {
                 return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
             });
             if (day) {
@@ -116,23 +103,21 @@
                 $scope.lunchstarttime = moment(day.StartLunch);
                 $scope.lunchendtime = moment(day.EndLunch);
                 $scope.endtime = moment(day.EndWork);
+                $scope.isVacation = day.IsVacation;
                 id = day.Id;
             } else {
                 setDefault();
             }
-
-            updateReportedDays();
         }
-
-    });
+    }
 
     var setDefault = function () {
         $scope.starttime = settings.starttime;
         $scope.lunchstarttime = settings.lunchstarttime;
         $scope.lunchendtime = settings.lunchendtime;
         $scope.endtime = settings.endtime;
+        $scope.isVacation = false;
     }
-    setDefault();
 
     var calcTotalTime = function() {
         var beforeLunch = moment($scope.lunchstarttime).diff(moment($scope.starttime));
@@ -150,24 +135,53 @@
 
     }
 
-
-    $scope.$watchGroup(['starttime', 'lunchstarttime', 'lunchendtime', 'endtime'], function (newValues, oldValues, scope) {
+    $scope.$watchGroup(['starttime', 'lunchstarttime', 'lunchendtime', 'endtime'], function () {
         calcTotalTime();
-        $rootScope.$broadcast('timechanged');
     });
 
     $scope.reset = function() {
         setDefault();
     }
 
+    var reRenderDatePicker = function () {
+        $('.datepicker').datepicker('remove');
+        $('.datepicker').datepicker({
+            weekStart: 1,
+            daysOfWeekDisabled: '0,6',
+            todayHighlight: true,
+            beforeShowDay: function (date) {
+
+                var hasReport = _.find(reports.monthReports, function (report) {
+                    return moment(report.Day).format("YYYY-MM-DD") == moment(date).format("YYYY-MM-DD");
+                });
+
+                return {
+                    enabled: true,
+                    classes: hasReport ? (hasReport.IsVacation ? "vacation" : "reported") : "",
+                }
+
+            }
+
+        }).on('changeDate', function (e) {
+            $scope.$apply(function () {
+                $scope.date.selectedDate = moment(e.date);
+            });
+        });
+    }
+
     $scope.remove = function () {
 
-        //Are you sure??
+        //var resultPromise = $http.post("/TimeReport/Delete", { id: id });
+        //resultPromise.success(function (result) {
 
-        var resultPromise = $http.post("/TimeReport/Delete", { id: id });
-        resultPromise.success(function (result) {
-
-        });
+        //});
+    }
+    $scope.vacation = function () {
+        $scope.isVacation = !$scope.isVacation;
+        if (!$scope.isVacation) {
+            setDefault();
+        }
+        $scope.changed();
     }
 
     $scope.setStartTimeNow = function() {
@@ -186,5 +200,12 @@
         $scope.lunchendtime = moment();
         $scope.changed();
     }
+
+    $(document).ready(function () {
+        getUserSettings();
+        setDefault();
+        $rootScope.$broadcast('getFlex');
+        reRenderDatePicker();
+    });
 
 });

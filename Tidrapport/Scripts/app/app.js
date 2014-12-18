@@ -8,6 +8,10 @@ tidrapport.factory('date', function () {
     return { selectedDate: moment() };
 });
 
+tidrapport.factory('reports', function () {
+    return { monthReports: [] };
+});
+
 tidrapport.factory('_', function () {
     return window._;
 });

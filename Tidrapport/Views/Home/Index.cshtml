@@ -23,27 +23,7 @@
   }*/
 
 }
-.datepicker:before {
-  content: '';
-  display: inline-block;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 7px solid #ccc;
-  border-bottom-color: rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: -7px;
-  left: 6px;
-}
-.datepicker:after {
-  content: '';
-  display: inline-block;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid #ffffff;
-  position: absolute;
-  top: -6px;
-  left: 7px;
-}
+
 .datepicker > div {
   display: none;
 }
@@ -167,6 +147,15 @@
 .datepicker th.switch {
   width: 145px;
 }
+.datepicker .today {
+    color: #c9d100 !important;
+}
+.datepicker .reported {
+    background-color: #5cb85c;
+}
+.datepicker .vacation {
+    background-color: #fc7474;
+}
 .datepicker th.next,
 .datepicker th.prev {
   font-size: 21px;
@@ -191,7 +180,7 @@
         <div class="col-lg-4">
             <div class="row">
                 <div ng-controller="datepickercontroller">
-                    <div class="datepicker" style="border: 1px solid #46b8da"></div>
+                    <div class="datepicker" ></div>
                 </div>
             </div>
         </div>
@@ -199,7 +188,7 @@
             @Html.Partial("../Report/_DayReport")
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="margin-top: 20px">
             @Html.Partial("../Report/_Stats")
     </div>
 </div>
