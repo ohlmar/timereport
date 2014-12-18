@@ -46,10 +46,10 @@
             });
             result = result.Data.DayReport;
             if (selectedDay) {
-                selectedDay.StartWork = result.StartWork;
-                selectedDay.StartLunch = result.StartLunch;
-                selectedDay.EndLunch = result.EndLunch;
-                selectedDay.EndWork = result.EndWork;
+                selectedDay.StartWork = result.StartWork ? result.StartWork : moment();
+                selectedDay.StartLunch = result.StartLunch ? result.StartLunch : moment();
+                selectedDay.EndLunch = result.EndLunch ? result.EndLunch: moment();
+                selectedDay.EndWork = result.EndWork ? result.EndWork : moment();
                 selectedDay.IsVacation = result.IsVacation;
             } else {
                 reports.monthReports.push(result);
@@ -79,10 +79,10 @@
                     });
 
                     if (day) {
-                        $scope.starttime = moment(day.StartWork);
-                        $scope.lunchstarttime = moment(day.StartLunch);
-                        $scope.lunchendtime = moment(day.EndLunch);
-                        $scope.endtime = moment(day.EndWork);
+                        $scope.starttime = day.StartWork ? moment(day.StartWork) : moment();
+                        $scope.lunchstarttime = day.StartLunch ? moment(day.StartLunch) : moment();
+                        $scope.lunchendtime = day.EndLunch ? moment(day.EndLunch) : moment();
+                        $scope.endtime = day.EndWork ? moment(day.EndWork) : moment();
                         $scope.isVacation = day.IsVacation;
                         id = day.Id;
                     } else {
@@ -99,10 +99,10 @@
                 return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
             });
             if (day) {
-                $scope.starttime = moment(day.StartWork);
-                $scope.lunchstarttime = moment(day.StartLunch);
-                $scope.lunchendtime = moment(day.EndLunch);
-                $scope.endtime = moment(day.EndWork);
+                $scope.starttime = day.StartWork ? moment(day.StartWork) : moment();
+                $scope.lunchstarttime = day.StartLunch ? moment(day.StartLunch): moment();
+                $scope.lunchendtime = day.EndLunch ? moment(day.EndLunch): moment();
+                $scope.endtime = day.EndWork ? moment(day.EndWork) : moment();
                 $scope.isVacation = day.IsVacation;
                 id = day.Id;
             } else {
