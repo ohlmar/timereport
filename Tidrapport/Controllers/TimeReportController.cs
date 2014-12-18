@@ -138,5 +138,27 @@ namespace Tidrapport.Controllers
             return Json(result);
         }
 
+        public JsonResult CalculateRemainingVacation()
+        {
+            var result = new ResultViewModel();
+
+            using (var uow = _uowFactory.GetUow())
+            {
+                var userId = User.Identity.GetUserId();
+
+                var user = uow.UserRepository.GetAll().FirstOrDefault(x => x.Id == userId);
+
+                var usedVacationDays = uow.DayReportRepository.GetAll().Count(x => x.UserId == userId && x.IsVacation);
+
+                result.Data = new
+                {
+                    TotalVacation = user.VacationDays,
+                    RemainingVacation = user.VacationDays - usedVacationDays
+                };
+            }
+
+            return Json(result);
+        }
+
     }
 }
