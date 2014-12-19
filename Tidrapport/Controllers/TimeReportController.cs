@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using Microsoft.AspNet.Identity;
 using Tidrapport.ViewModels;
+using TimeReport.Business.Contract.Managers;
 using TimeReport.Data.Contract;
 using TimeReport.Model;
 using TimeReport.Model.Entities;
@@ -18,9 +19,12 @@ namespace Tidrapport.Controllers
     {
         private readonly IUowFactory _uowFactory;
 
-        public TimeReportController(IUowFactory uowFactory)
+        private readonly ICalculationManager _calculationManager;
+
+        public TimeReportController(IUowFactory uowFactory, ICalculationManager calculationManager)
         {
             _uowFactory = uowFactory;
+            _calculationManager = calculationManager;
         }
 
         public JsonResult Post(DayReportViewModel model)
@@ -32,7 +36,7 @@ namespace Tidrapport.Controllers
 
             if (mappedModel.Day == DateTime.MinValue)
             {
-                result.Messages.Add(new Message{ Text = "DayReport.Day needs to have a value" });
+                result.Messages.Add(new Message { Text = "DayReport.Day needs to have a value" });
                 return Json(result);
             }
 
@@ -88,7 +92,7 @@ namespace Tidrapport.Controllers
                 var userId = User.Identity.GetUserId();
 
                 var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && DbFunctions.TruncateTime(x.Day) >= DbFunctions.TruncateTime(startDate) && DbFunctions.TruncateTime(x.Day) <= DbFunctions.TruncateTime(endDate));
-                
+
                 result.Data = new
                 {
                     Reports = Mapper.Map<List<DayReportViewModel>>(reports)
@@ -121,19 +125,12 @@ namespace Tidrapport.Controllers
         {
             var result = new ResultViewModel();
 
-            using (var uow = _uowFactory.GetUow())
+            var userId = User.Identity.GetUserId();
+
+            result.Data = new
             {
-                var userId = User.Identity.GetUserId();
-
-                var reports = uow.DayReportRepository.GetAll().Where(x => x.UserId == userId && !x.IsVacation).ToList();
-
-                var flex = reports.Where(x => x.TotalWork != null).Sum(x => x.TotalWork.Value - 8);
-
-                result.Data = new
-                {
-                    Flex = flex
-                };
-            }
+                Flex = _calculationManager.CalculateFlex(userId)
+            };
 
             return Json(result);
         }
@@ -156,6 +153,18 @@ namespace Tidrapport.Controllers
                     RemainingVacation = user.VacationDays - usedVacationDays
                 };
             }
+
+            return Json(result);
+        }
+
+        public JsonResult GetFlexInterval(DateTime startDate, DateTime endDate)
+        {
+            var result = new ResultViewModel();
+
+            result.Data = new
+            {
+                FlexList = _calculationManager.GetFlexForInterval(User.Identity.GetUserId(), startDate, endDate)
+            };
 
             return Json(result);
         }

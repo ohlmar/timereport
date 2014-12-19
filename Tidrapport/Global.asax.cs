@@ -4,6 +4,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Practices.Unity;
 using Tidrapport.Configuration;
+using TimeReport.Business.Contract.Managers;
+using TimeReport.Business.Managers;
 using TimeReport.Data;
 using TimeReport.Data.Contract;
 
@@ -32,6 +34,8 @@ namespace Tidrapport
 
             container.RegisterType<IUowFactory, UowFactory>();
             container.RegisterType<ITimeReportUow, TimeReportUow>();
+            container.RegisterType<ICalculationManager, CalculationManager>();
+
 
             ControllerBuilder.Current.SetControllerFactory(new UnityControllerFactory(container));
         }

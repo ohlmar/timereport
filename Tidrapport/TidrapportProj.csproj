@@ -397,6 +397,14 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TimeReport.Business.Contract\TimeReport.Business.Contract.csproj">
+      <Project>{c5dbcff5-0cf7-4a2e-824c-b2183a8adf55}</Project>
+      <Name>TimeReport.Business.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TimeReport.Business\TimeReport.Business.csproj">
+      <Project>{1edd8fa0-4bd8-4a13-a12b-bc8bf5d78c5b}</Project>
+      <Name>TimeReport.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TimeReport.Data.Contract\TimeReport.Data.Contract.csproj">
       <Project>{0870c42f-ae87-4547-86ff-dce15de54221}</Project>
       <Name>TimeReport.Data.Contract</Name>
@@ -424,7 +432,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>53130</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

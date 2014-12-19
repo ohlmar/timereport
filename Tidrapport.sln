@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Data", "TimeRepo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Data.Contract", "TimeReport.Data.Contract\TimeReport.Data.Contract.csproj", "{0870C42F-AE87-4547-86FF-DCE15DE54221}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Business.Contract", "TimeReport.Business.Contract\TimeReport.Business.Contract.csproj", "{C5DBCFF5-0CF7-4A2E-824C-B2183A8ADF55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeReport.Business", "TimeReport.Business\TimeReport.Business.csproj", "{1EDD8FA0-4BD8-4A13-A12B-BC8BF5D78C5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{0870C42F-AE87-4547-86FF-DCE15DE54221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0870C42F-AE87-4547-86FF-DCE15DE54221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0870C42F-AE87-4547-86FF-DCE15DE54221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DBCFF5-0CF7-4A2E-824C-B2183A8ADF55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DBCFF5-0CF7-4A2E-824C-B2183A8ADF55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DBCFF5-0CF7-4A2E-824C-B2183A8ADF55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DBCFF5-0CF7-4A2E-824C-B2183A8ADF55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EDD8FA0-4BD8-4A13-A12B-BC8BF5D78C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EDD8FA0-4BD8-4A13-A12B-BC8BF5D78C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EDD8FA0-4BD8-4A13-A12B-BC8BF5D78C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EDD8FA0-4BD8-4A13-A12B-BC8BF5D78C5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
