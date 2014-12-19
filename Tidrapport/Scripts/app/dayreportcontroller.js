@@ -52,8 +52,9 @@
             }
             $rootScope.$broadcast('getFlex');
         });
-    };
 
+
+    };
 
     $scope.$watch('date.selectedDate', function () {
         selectedDayChange();
@@ -133,6 +134,7 @@
 
     $scope.$watchGroup(['starttime', 'lunchstarttime', 'lunchendtime', 'endtime'], function () {
         calcTotalTime();
+        updateCharts();
     });
 
     $scope.reset = function() {
@@ -165,6 +167,59 @@
 
         //$('.datepicker').datepicker('hide');
 
+    }
+
+    $('#semicirclepie').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+        },
+        title: {
+            text: 'Tidsfördelning',
+            align: 'center',
+            verticalAlign: 'middle',
+            y: 50
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textShadow: '0px 1px 2px black'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%']
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Tidsfördelning',
+            innerSize: '50%',
+            data: [
+                ['Förmiddag', 0],
+                ['Lunch', 0],
+                ['Eftermiddag', 0]
+            ]
+        }]
+    });
+
+    var updateCharts = function () {
+        $('#semicirclepie').highcharts().series[0].update({
+            data: [
+                    ['Förmiddag', moment($scope.lunchstarttime).diff(moment($scope.starttime))],
+                    ['Lunch', moment($scope.lunchendtime).diff(moment($scope.lunchstarttime))],
+                    ['Eftermiddag', moment($scope.endtime).diff(moment($scope.lunchendtime))]
+            ]
+        });
     }
 
     $scope.remove = function () {
