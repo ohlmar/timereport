@@ -19,8 +19,6 @@
         endtime: moment(),
     };
 
-
-
     $scope.ismeridian = false;
 
     var getUserSettings = function () {
@@ -34,8 +32,6 @@
             settings.endtime = result.DefaultEndWork ? moment(result.DefaultEndWork) : moment().hours(16).minute(30);
         });
     };
-
-
 
     $scope.changed = function () {
 
@@ -144,29 +140,31 @@
     }
 
     var reRenderDatePicker = function () {
-        $('.datepicker').datepicker('remove');
-        $('.datepicker').datepicker({
-            weekStart: 1,
-            daysOfWeekDisabled: '0,6',
-            todayHighlight: true,
-            beforeShowDay: function (date) {
 
-                var hasReport = _.find(reports.monthReports, function (report) {
-                    return moment(report.Day).format("YYYY-MM-DD") == moment(date).format("YYYY-MM-DD");
-                });
+        var days = $('td.day').not('.disabled').not('.new').not('.old');
 
-                return {
-                    enabled: true,
-                    classes: hasReport ? (hasReport.IsVacation ? "vacation" : "reported") : "",
-                }
+        var selDate = date.selectedDate;
 
-            }
-
-        }).on('changeDate', function (e) {
-            $scope.$apply(function () {
-                $scope.date.selectedDate = moment(e.date);
-            });
+        var item = _.find(days, function(day) {
+            return moment(selDate).date().toString() == day.innerHTML;
         });
+
+        if (item) {
+            item.click();
+
+            var item = _.find($('td.day').not('.disabled').not('.new').not('.old').not('.active'), function (day) {
+                return moment(selDate).date().toString() == day.innerHTML;
+            });
+            
+            if (item) {
+                item.click();
+            }
+        } else {
+            days[0].click();
+        }
+
+        //$('.datepicker').datepicker('hide');
+
     }
 
     $scope.remove = function () {

@@ -10,11 +10,6 @@
         $scope.dt = null;
     };
 
-
-    var render = function(date) {
-        
-    }
-
     $('.datepicker').datepicker({
         weekStart: 1,
         daysOfWeekDisabled: '0,6',
@@ -33,7 +28,11 @@
         }
 
     }).on('changeDate', function(e) {
-        $scope.$apply(function() {
+        $scope.$apply(function () {
+            $scope.date.selectedDate = moment(e.date);
+        });
+    }).on('changeMonth', function (e) {
+        $scope.$apply(function () {
             $scope.date.selectedDate = moment(e.date);
         });
     });

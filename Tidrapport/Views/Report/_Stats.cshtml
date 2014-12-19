@@ -35,7 +35,7 @@ label {
 </style>
 
 <div ng-controller="statscontroller">
-    <div id="summaries" style="text-align: center">
+    <div id="summaries" class="row" style="text-align: center">
         <div class="box">
             <label>Flexbank</label>
             <input readonly="readonly" ng-value="totalFlex" />
@@ -44,6 +44,9 @@ label {
             <label>Semesterdagar</label>
             <input readonly="readonly" ng-model="remainingVacation" value="24" />
         </div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </div>
 
 </div>
