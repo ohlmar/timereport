@@ -10,6 +10,18 @@
         resultPromise.success(function (result) {
             $scope.totalFlex = parseFloat(result.Data.Flex).toFixed(2);
         });
+
+        var resultPromise = $http.post("/TimeReport/GetFlexInterval", {
+            startDate: moment().subtract(21, 'days'), endDate: moment()
+        });
+        resultPromise.success(function (result) {
+            $('#container').highcharts().series[0].update({
+                data: result.Data.FlexList
+                
+            });
+        });
+
+
     };
     var getRemainingVacation = function () {
         var resultPromise = $http.post("/TimeReport/CalculateRemainingVacation");
