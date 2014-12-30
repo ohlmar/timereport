@@ -30,10 +30,19 @@
         });
     };
 
+    $scope.types = ["area", "line", "bar", "pie"];
+
+
+    $scope.changeType = function() {
+        $('#container').highcharts().series[0].update({
+            type: $scope.item
+        });
+    }
+
 
     $('#container').highcharts({
         chart: {
-            zoomType: 'x'
+            zoomType: 'x',
         },
         title: {
             text: 'Flexbank'

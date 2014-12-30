@@ -46,6 +46,8 @@ label {
         </div>
     </div>
     <div class="row" style="margin-top: 20px;">
+        <select ng-init="types[1]" ng-options="type for type in types " ng-model="item" ng-change="changeType()"></select>
+
         <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
     </div>
 
