@@ -176,7 +176,7 @@
             plotShadow: false
         },
         title: {
-            text: 'Tidsfördelning',
+            text: '',
             align: 'center',
             verticalAlign: 'middle',
             y: 50
@@ -215,9 +215,9 @@
     var updateCharts = function () {
         $('#semicirclepie').highcharts().series[0].update({
             data: [
-                    ['Förmiddag', moment($scope.lunchstarttime).diff(moment($scope.starttime))],
-                    ['Lunch', moment($scope.lunchendtime).diff(moment($scope.lunchstarttime))],
-                    ['Eftermiddag', moment($scope.endtime).diff(moment($scope.lunchendtime))]
+                    ['Fm', moment($scope.lunchstarttime).diff(moment($scope.starttime))],
+                    ['L', moment($scope.lunchendtime).diff(moment($scope.lunchstarttime))],
+                    ['Em', moment($scope.endtime).diff(moment($scope.lunchendtime))]
             ]
         });
     }
