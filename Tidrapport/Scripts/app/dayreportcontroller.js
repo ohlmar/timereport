@@ -223,11 +223,14 @@
     }
 
     $scope.remove = function () {
-
-        //var resultPromise = $http.post("/TimeReport/Delete", { id: id });
-        //resultPromise.success(function (result) {
-
-        //});
+        var resultPromise = $http.post("/TimeReport/Delete", { id: id });
+        resultPromise.success(function (result) {
+            var removedDay = _.find(reports.monthReports, function (day) {
+                return moment(day.Day).format("YYYY-MM-DD") == moment($scope.date.selectedDate).format("YYYY-MM-DD");
+            });
+            var index = reports.monthReports.indexOf(removedDay);
+            reports.monthReports.splice(index, 1);
+        });
     }
     $scope.vacation = function () {
         $scope.isVacation = !$scope.isVacation;
